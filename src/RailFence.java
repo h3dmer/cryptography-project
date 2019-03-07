@@ -1,3 +1,4 @@
+import javax.imageio.metadata.IIOMetadataFormatImpl;
 import java.util.Scanner;
 
 public class RailFence {
@@ -8,8 +9,9 @@ public class RailFence {
     private char[][] array;
     private String encryptextText;
     private String decryptedText;
+    //private char[][] finalArray;
 
-
+    public RailFence() {}
 
     public RailFence(int n, String text) {
         this.n = n;
@@ -22,7 +24,7 @@ public class RailFence {
         StringBuilder strb;
         strb = new StringBuilder();
 
-        setArray();
+        setArray('*', array);
 
         boolean way = false;
 
@@ -57,38 +59,86 @@ public class RailFence {
         System.out.print(encryptextText);
     }
 
-    private void setArray() {
+    public void makeDecryption() {
+
+        StringBuilder sb = new StringBuilder();
+        setArray('!', array);
+
+        boolean way = false;
+
+        int row = 0;
+        int col = 0;
+        int counter = 0;
+
+        for (int i = 0; i < text.length(); i++) {
+
+            if ( row == 0 || row == (n - 1) ) {
+                way = !way;
+            }
+
+            array[row][col++] = '*';
+
+            if (way) {
+                row++;
+            } else {
+                row--;
+            }
+
+        }
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < text.length() ; j++) {
+                if(array[i][j] == '*') {
+                    array[i][j] = text.charAt(counter);
+                    counter++;
+                }
+            }
+        }
+
+        row = 0;
+        col = 0;
+
+        for (int i = 0; i < text.length(); i++) {
+
+            if ( row == 0 || row == (n - 1) ) {
+                way = !way;
+            }
+
+            sb.append(array[row][col++]);
+
+            if (way) {
+                row++;
+            } else {
+                row--;
+            }
+
+        }
+
+        decryptedText = new String(sb);
+
+    }
+
+    private void setArray(char ch, char[][] array) {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < text.length(); j++) {
-                array[i][j] = '*';
+                array[i][j] = ch;
             }
         }
     }
 
     public static void main(String[] args) {
 
-        Scanner scanner = new Scanner(System.in);
+        RailFence decrypt = new RailFence(4, "KGRORAYTAIPF");
+        decrypt.makeDecryption();
 
-        System.out.println("Gimme some text:");
-        String sampleText = scanner.nextLine();
-
-        System.out.println("Gimme some key:");
-        int n = scanner.nextInt();
-
-        //RailFence rf = new RailFence(3, "KRYPTOGRAFIA");
-
-        RailFence rf = new RailFence(n, sampleText);
-        System.out.println("Encrypted: ");
-        rf.makeEncryption();
-        System.out.println();
-        //rf.makeDecryption(4, rf.text);
-
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < sampleText.length(); j++) {
-                System.out.print(rf.array[i][j]);
+        for (int i = 0; i < decrypt.n; i++) {
+            for (int j = 0; j < decrypt.text.length(); j++) {
+                System.out.print(decrypt.array[i][j]);
             }
             System.out.println();
         }
+
+        System.out.print(decrypt.decryptedText);
 
     }
 }
