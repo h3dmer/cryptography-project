@@ -1,4 +1,4 @@
-
+import java.util.Scanner;
 
 public class Macierz2b {
 
@@ -6,7 +6,8 @@ public class Macierz2b {
     private int[] array;
 
     public Macierz2b(String key) {
-        this.key = key;
+        String temp = key;
+        this.key = temp.toUpperCase();
     }
 
     public void createNumbersArray() {
@@ -14,14 +15,15 @@ public class Macierz2b {
 
         char counter = 'A';
         int temp = 0;
-        int j=0;
+
 
         for (int i = 0; i < 26; i++) {
-            for (j = 0; j < key.length(); ++j) {
+            for (int j = 0; j < key.length(); j++) {
                 if ( key.charAt(j) == counter ) {
                     //System.out.println(key.charAt(j));
                     array[temp] = j;
                     temp++;
+
                 }
             }
             //System.out.println();
@@ -61,7 +63,35 @@ public class Macierz2b {
         return result;
     }
 
+
     public String decryptionString(String textToDecrypt) {
+
+        int rows = textToDecrypt.length() / array.length + 1;
+        StringBuilder sb = new StringBuilder();
+        int k = 0;
+
+        for (int i = 0; i < textToDecrypt.length(); i++) {
+            sb.append('1');
+        }
+
+        System.out.println();
+        for (int i = 0; i < array.length; i++) {
+            for (int j = 0; j < rows; j++) {
+                try {
+                    sb.setCharAt(array[i] + j * array.length, textToDecrypt.charAt(k));
+                    k++;
+                } catch (IndexOutOfBoundsException e) { }
+            }
+        }
+
+        String result = new String(sb);
+        System.out.println(sb);
+        return result;
+    }
+
+
+
+    /*public String decryptionString(String textToDecrypt) {
 
         int rows = textToDecrypt.length() / array.length + 1;
         StringBuilder sb = new StringBuilder();
@@ -74,21 +104,22 @@ public class Macierz2b {
         int checkLastRow;
 
         if(textToDecrypt.length() % array.length == 0) {
-            checkLastRow = Integer.MAX_VALUE;
+            checkLastRow = textToDecrypt.length();
         } else {
             checkLastRow = (textToDecrypt.length() % array.length);
         }
-
+        System.out.println();
         for (int i = 0; i < array.length; i++) {
             for (int j = 0; j < rows; j++) {
                 try {
-                    if ( j != rows - 1 ) {
+                    //if ( j != rows - 1 ) {
                         sb.setCharAt(array[i] + j * array.length, textToDecrypt.charAt(k));
+                    System.out.print( " " + array[i] + j * array.length);
                         k++;
-                    } else if (array[i] < checkLastRow) {
-                        sb.setCharAt(array[i] + j * array.length, textToDecrypt.charAt(k));
-                        k++;
-                    }
+                    //} else if (array[i] < checkLastRow) {
+                       // sb.setCharAt(array[i] + j * array.length, textToDecrypt.charAt(k));
+                       // k++;
+                   // }
 
                 } catch (IndexOutOfBoundsException e) { }
             }
@@ -98,18 +129,32 @@ public class Macierz2b {
         String result = new String(sb);
         System.out.println(sb);
         return result;
-    }
+    }*/
 
 
     public static void main(String[] args) {
-        Macierz2b m2b = new Macierz2b("CONVENIENCE");
+
+        System.out.println("Podaj text: ");
+        Scanner sc = new Scanner(System.in);
+        String inputText = sc.nextLine();
+        String textToEncrypt = inputText.toUpperCase();
+
+        System.out.println("Podaj klucz: ");
+        sc = new Scanner(System.in);
+        String ki = sc.nextLine();
+        Macierz2b m2b = new Macierz2b(ki);
 
         m2b.createNumbersArray();
 
-        m2b.printArray();
-        String encyptedText = m2b.encryptingString("HEREISASECRETMESSAGEENCIPHEREDBYTRANSPOSITION");
+       // m2b.printArray();
+
+
+
+        //System.out.println(textToEncrypt);
+        String encyptedText = m2b.encryptingString(textToEncrypt);
         System.out.println();
 
+        System.out.println("Po dekrypcji: \n");
         m2b.decryptionString(encyptedText);
 
 

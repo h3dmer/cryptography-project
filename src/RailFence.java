@@ -1,4 +1,3 @@
-import javax.imageio.metadata.IIOMetadataFormatImpl;
 import java.util.Scanner;
 
 public class RailFence {
@@ -62,7 +61,7 @@ public class RailFence {
     public void makeDecryption() {
 
         StringBuilder sb = new StringBuilder();
-        setArray('!', array);
+        setArray(' ', array);
 
         boolean way = false;
 
@@ -128,7 +127,30 @@ public class RailFence {
 
     public static void main(String[] args) {
 
-        RailFence decrypt = new RailFence(4, "KGRORAYTAIPF");
+        System.out.println("Podaj text do encrypcji: ");
+        Scanner sc = new Scanner(System.in);
+        String s = sc.nextLine();
+        System.out.println("Podaj n: ");
+        sc = new Scanner(System.in);
+        int n = sc.nextInt();
+
+
+
+        RailFence rf = new RailFence(n, s);
+        rf.makeEncryption();
+
+        System.out.println("\n\n");
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Podaj text do decrypcji: ");
+
+        String str = scanner.nextLine();
+        System.out.println("Podaj n: ");
+        scanner = new Scanner(System.in);
+        int key = scanner.nextInt();
+
+
+        RailFence decrypt = new RailFence(key, str);
         decrypt.makeDecryption();
 
         for (int i = 0; i < decrypt.n; i++) {
